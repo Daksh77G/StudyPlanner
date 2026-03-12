@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
-#include <limits>  // for numeric_limits
+#include <limits>  
 
 using namespace std;
 
@@ -13,12 +13,12 @@ int getIntInput(const string& prompt) {
     while (true) {
         cout << prompt;
         if (cin >> value) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear newline
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             return value;
         } else {
             cout << "Invalid input. Please enter a number." << endl;
-            cin.clear(); // clear fail state
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // remove bad input
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
 }
@@ -31,12 +31,17 @@ int main() {
     bool running = true;
 
     while (running) {
-        cout << "\nMenu:\n1. Add Task\n2. View Tasks\n3. Complete Task\n4. Exit\n";
+        cout << "\nMenu:\n"
+                "1. Add Task\n"
+                "2. View Tasks\n"
+                "3. Complete Task\n"
+                "4. Delete Task\n"
+                "5. Exit\n";
 
         int choice = getIntInput("Enter your choice: ");
 
         switch (choice) {
-            case 1: {
+            case 1: { // Add Task
                 string name, subject;
                 int priority;
 
@@ -71,7 +76,7 @@ int main() {
                 break;
             }
 
-            case 2: {
+            case 2: { // View Tasks
                 if (tasks.empty()) {
                     cout << "No tasks added yet!" << endl;
                 } else {
@@ -121,11 +126,41 @@ int main() {
                 break;
             }
 
-            case 4:
+            case 4: {
+                if (tasks.empty()) {
+                    cout << "No tasks to delete!" << endl;
+                } else {
+                    cout << "\nCurrent Tasks:\n";
+                    for (int i = 0; i < tasks.size(); i++)
+                        cout << i + 1 << ". " << tasks[i].getName() << endl;
+
+                    int t = getIntInput("Enter task number to delete: ");
+                    if (t >= 1 && t <= tasks.size()) {
+                        char confirm;
+                        cout << "Are you sure you want to delete \"" << tasks[t-1].getName() << "\"? (y/n): ";
+                        cin >> confirm;
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                        if (confirm == 'y' || confirm == 'Y') {
+                            tasks.erase(tasks.begin() + (t - 1));
+                            FileManager::saveTasks(tasks);
+                            cout << "Task deleted successfully!" << endl;
+                        } else {
+                            cout << "Deletion cancelled." << endl;
+                        }
+                    } else {
+                        cout << "Invalid task number!" << endl;
+                    }
+                }
+                break;
+            }
+
+            case 5: { // Exit
                 FileManager::saveTasks(tasks);
                 cout << "Tasks saved! Exiting. Goodbye!" << endl;
                 running = false;
                 break;
+            }
 
             default:
                 cout << "Invalid choice." << endl;
