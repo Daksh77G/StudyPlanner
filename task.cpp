@@ -1,7 +1,6 @@
-#include "Task.h"
+#include "task.h"
 
-
-Task::Task(string n, string s, time_t d, int p) {
+Task::Task(std::string n, std::string s, std::time_t d, int p) {
     name = n;
     subject = s;
     deadline = d;
@@ -9,26 +8,26 @@ Task::Task(string n, string s, time_t d, int p) {
     completed = false;
 }
 
-string Task::getName() { 
-    return name; 
+std::string Task::getName() const {
+    return name;
 }
 
-string Task::getSubject() { 
-    return subject; 
+std::string Task::getSubject() const {
+    return subject;
 }
 
-time_t Task::getDeadline() { 
-    return deadline; 
+std::time_t Task::getDeadline() const {
+    return deadline;
 }
 
-int Task::getPriority() { 
-    return priority; 
+int Task::getPriority() const {
+    return priority;
 }
 
-bool Task::isCompleted() { 
-    return completed; 
+bool Task::isCompleted() const {
+    return completed;
 }
 
-void Task::markComplete() { 
-    completed = true; 
+void Task::markComplete() {
+    completed = true;
 }
